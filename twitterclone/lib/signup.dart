@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:twitterclone/signup.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MyHomePage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  State<SignUp> createState() => _MyHomePageState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<SignUp> {
   final GlobalKey<FormState> _signInKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -39,7 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text("Log in to Twitter", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            const Text("Sign Up to Twitter", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
@@ -56,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 validator: (value){
-                  if (value == null || value.isEmpty) {
+                  if(value == null || value.isEmpty) {
                     return "Please enter your email";
                   } else if (!emailValid.hasMatch(value)) {
                     return "Please enter a valid email address";
@@ -100,16 +83,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   debugPrint("Password: ${passwordController.text}");
                   }
                 },
-                child: const Text('Submit', style: TextStyle(color: Colors.white, fontSize: 18),),
+                child: const Text('Sign Up', style: TextStyle(color: Colors.white, fontSize: 18),),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextButton(
                 onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SignUp()));
+                  Navigator.of(context).pop();
                 },
-                child: const Text("Don't have an account? Sign up here")),
+                child: const Text("Already have an account? Log In")),
             ),
           ],
         ),
