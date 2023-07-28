@@ -39,6 +39,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const Image(
+              image: AssetImage('assets/twitter_blue.png'), 
+              width: 100,
+            ),
+            const SizedBox(
+              height: 20
+              ),
             const Text("Log in to Twitter", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Container(
@@ -100,14 +107,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   debugPrint("Password: ${passwordController.text}");
                   }
                 },
-                child: const Text('Submit', style: TextStyle(color: Colors.white, fontSize: 18),),
+                child: const Text('Log In', style: TextStyle(color: Colors.white, fontSize: 18),),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextButton(
                 onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SignUp()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=> const SignUp()));
                 },
                 child: const Text("Don't have an account? Sign up here")),
             ),
