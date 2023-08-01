@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/users.dart';
+import '../models/user.dart';
 
 final userProvider = StateNotifierProvider<UserNotifier, LocalUser>((ref) {
   return UserNotifier();
@@ -28,7 +28,11 @@ class UserNotifier extends StateNotifier<LocalUser> {
       : super(
           const LocalUser(
             id: "error",
-            user: FirebaseUser(email: "error"),
+            user: FirebaseUser(
+              email: "error",
+              name: "error",
+              profilePic: "error",
+            ),
           ),
         );
 
@@ -48,24 +52,34 @@ class UserNotifier extends StateNotifier<LocalUser> {
     }
     state = LocalUser(
       id: response.docs[0].id,
-      user: FirebaseUser(email: email),
+      user:
+          FirebaseUser.fromMap(response.docs[0].data() as Map<String, dynamic>),
     );
   }
 
   Future<void> signUp(String email) async {
     DocumentReference response = await _firestore.collection("users").add(
-          FirebaseUser(email: email).toMap(),
+          FirebaseUser(
+            email: email,
+            name: "No Name",
+            profilePic: "http://www.gravatar.com/avatar/?d=mp",
+          ).toMap(),
         );
+    DocumentSnapshot snapshot = await response.get();
     state = LocalUser(
       id: response.id,
-      user: FirebaseUser(email: email),
+      user: FirebaseUser.fromMap(snapshot.data() as Map<String, dynamic>),
     );
   }
 
   void logout() {
     state = const LocalUser(
       id: "error",
-      user: FirebaseUser(email: "error"),
+      user: FirebaseUser(
+        email: "error",
+        name: "error",
+        profilePic: "error",
+      ),
     );
   }
 }

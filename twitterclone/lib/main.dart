@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:twitterclone/pages/home.dart';
 import 'package:twitterclone/pages/signin.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:twitterclone/providers/user_provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -14,16 +15,17 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              ref.read(userProvider.notifier).login(snapshot.data!.email!);
               return const Home();
             }
             return const SignIn();
