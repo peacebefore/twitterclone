@@ -1,14 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:twitterclone/pages/signup.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({super.key});
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
   @override
-  State<SignUp> createState() => _MyHomePageState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _MyHomePageState extends State<SignUp> {
+class _SignInState extends State<SignIn> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _signInKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -23,23 +26,26 @@ class _MyHomePageState extends State<SignUp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const FaIcon(FontAwesomeIcons.twitter,
-             color: Colors.blue, 
-             size: 70,
-             ),
+            const FaIcon(
+              FontAwesomeIcons.twitter,
+              color: Colors.blue,
+              size: 70,
+            ),
             const SizedBox(
               height: 20,
-              ),
-            const Text("Sign Up to Twitter", 
-            style: TextStyle(
-              fontSize: 18, 
-              fontWeight: FontWeight.bold
-              ),
+            ),
+            const Text(
+              "Log in to Twitter",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Container(
               margin: const EdgeInsets.fromLTRB(15, 30, 15, 0),
-              padding: const EdgeInsets.symmetric(vertical: 10,),
-              decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(30),
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(30),
               ),
               child: TextFormField(
                 keyboardType: TextInputType.emailAddress,
@@ -47,11 +53,13 @@ class _MyHomePageState extends State<SignUp> {
                 decoration: const InputDecoration(
                   hintText: 'Enter your email',
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
                   ),
                 ),
-                validator: (value){
-                  if(value == null || value.isEmpty) {
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
                     return "Please enter your email";
                   } else if (!emailValid.hasMatch(value)) {
                     return "Please enter a valid email address";
@@ -62,8 +70,12 @@ class _MyHomePageState extends State<SignUp> {
             ),
             Container(
               margin: const EdgeInsets.all(15),
-              padding: const EdgeInsets.symmetric(vertical: 10,),
-              decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(30),
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(30),
               ),
               child: TextFormField(
                 controller: passwordController,
@@ -71,11 +83,13 @@ class _MyHomePageState extends State<SignUp> {
                 decoration: const InputDecoration(
                   hintText: 'Password',
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20,
+                  contentPadding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 20,
                   ),
                 ),
-                validator: (value){
-                  if(value == null || value.isEmpty){
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
                     return "Please enter a password";
                   } else if (value.length < 6) {
                     return "Password must be at least 6 characters";
@@ -87,24 +101,37 @@ class _MyHomePageState extends State<SignUp> {
             Container(
               width: 200,
               padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(30)),
+              decoration: BoxDecoration(
+                  color: Colors.blue, borderRadius: BorderRadius.circular(30)),
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_signInKey.currentState!.validate()) {
-                  debugPrint("Email: ${emailController.text}");
-                  debugPrint("Password: ${passwordController.text}");
+                    try {
+                      await _auth.signInWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(e.toString())),
+                      );
+                    }
                   }
                 },
-                child: const Text('Sign Up', style: TextStyle(color: Colors.white, fontSize: 18),),
+                child: const Text(
+                  'Log In',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextButton(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-                child: const Text("Already have an account? Log In")),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const SignUp()));
+                  },
+                  child: const Text("Don't have an account? Sign up here")),
             ),
           ],
         ),
