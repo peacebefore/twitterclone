@@ -29,6 +29,13 @@
             {
               "client_id": "592844020075-a89bngeh4leeq8trrdqvgb7oiq4sfefm.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "592844020075-gjucumqiq348d55qjuu7mr6ipj5mlubv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.twitterclone.RunnerTests"
+              }
             }
           ]
         }
